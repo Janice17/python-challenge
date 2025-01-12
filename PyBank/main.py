@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-"""PyBank Homework Solution."""
+#"""PyBank Homework Solution."""
 
 # Dependencies
 import csv
@@ -9,12 +9,10 @@ import os
 file_to_load = os.path.join("Resources", "budget_data.csv")  # Input file path
 file_to_output = os.path.join("analysis", "budget_analysis.txt")  # Output file path
 
-# Define variables to track the financial data
+# Define variables to track the financial data and calculate the summary
 total_months = 0
 total_net = 0
 prev_profit_loss = 0
-
-# Define variables to track changes in "Profit/Losses", greatest increase in profits, and greatest decrease in profits over the entire period.
 changes = []
 greatest_increase = ["", 0]
 greatest_decrease = ["", 9999999999999999999]
@@ -42,6 +40,7 @@ with open(file_to_load, encoding='UTF-8') as financial_data:
 
         # Track the net change
         total_net = total_net + int(row[1])
+        # Changes in "profit/losses" over the entire period
         change = int(row[1]) - prev_profit_loss
         changes.append(change)
         prev_profit_loss = int(row[1])
@@ -60,15 +59,13 @@ with open(file_to_load, encoding='UTF-8') as financial_data:
 average_changes = sum(changes[1:]) / len(changes[1:])
 
 # Generate the output summary and print the output
-output = f"""
-Financial Analysis
+output = f"""Financial Analysis
 ----------------------------
 Total Months: {total_months}
 Total: ${total_net}
 Average Change: ${average_changes:.2f}
 Greatest Increase in Profits: {greatest_increase[0]} (${greatest_increase[1]})
-Greatest Decrease in Profits: {greatest_decrease[0]} (${greatest_decrease[1]})
-"""
+Greatest Decrease in Profits: {greatest_decrease[0]} (${greatest_decrease[1]})"""
 print(output)
 
 
