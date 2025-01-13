@@ -13,9 +13,10 @@ file_to_output = os.path.join("analysis", "budget_analysis.txt")  # Output file 
 total_months = 0
 total_net = 0
 prev_profit_loss = 0
-changes = []
-greatest_increase = ["", 0]
-greatest_decrease = ["", 9999999999999999999]
+changes = [] # To Track the changes in profit/losses
+months = [] # To Track the months for our changes
+greatest_increase = ["", float('inf') * -1]
+greatest_decrease = ["", float('inf')]
 
 # Open and read the csv. with open (file_to_load, encoding='utf-8') as csvfile:
 with open(file_to_load, encoding='UTF-8') as financial_data:
@@ -28,8 +29,8 @@ with open(file_to_load, encoding='UTF-8') as financial_data:
     first_row = next(reader)
 
     # Track the total and net change
-    total_months += 1
-    total_net += int(first_row[1])
+    total_months = 1
+    total_net = int(first_row[1])
     prev_profit_loss = int(first_row[1])
 
     # Process each row of data
@@ -37,13 +38,14 @@ with open(file_to_load, encoding='UTF-8') as financial_data:
 
         # Track the total
         total_months = total_months + 1
+        current_profit_loss = int(row[1])
 
         # Track the net change
-        total_net = total_net + int(row[1])
+        total_net = total_net + current_profit_loss
         # Changes in "profit/losses" over the entire period
-        change = int(row[1]) - prev_profit_loss
+        change = current_profit_loss - prev_profit_loss
         changes.append(change)
-        prev_profit_loss = int(row[1])
+        months.append(row[0]) # Store the month for this change
 
         # Calculate the greatest increase in profits (month and amount)
         if(change > greatest_increase[1]):
@@ -55,15 +57,18 @@ with open(file_to_load, encoding='UTF-8') as financial_data:
             greatest_decrease[0] = row[0]
             greatest_decrease[1] = change
 
+        #Set up for next change calculation
+        prev_profit_loss = current_profit_loss
+
 # Calculate the average net change across the months
-average_changes = sum(changes[1:]) / len(changes[1:])
+net_montly_avg = sum(changes) / len(changes)
 
 # Generate the output summary and print the output
 output = f"""Financial Analysis
 ----------------------------
 Total Months: {total_months}
 Total: ${total_net}
-Average Change: ${average_changes:.2f}
+Average Change: ${net_montly_avg:.2f}
 Greatest Increase in Profits: {greatest_increase[0]} (${greatest_increase[1]})
 Greatest Decrease in Profits: {greatest_decrease[0]} (${greatest_decrease[1]})"""
 print(output)

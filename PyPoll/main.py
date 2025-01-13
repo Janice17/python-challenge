@@ -29,8 +29,8 @@ with open(file_to_load, encoding='UTF-8') as election_data:
     # Loop through each row of the dataset and process it
     for row in reader:
 
-        # Print a loading indicator (for large datasets)
-        #print(". ", end="")
+        # Print a loading indicator (for large datasets). Did this but takes forever.
+        print(". ", end="")
 
         # Increment the total vote count for each row
         total_votes = total_votes +1
@@ -68,7 +68,7 @@ with open(file_to_output, "w") as txt_file:
         # Update the winning candidate if this one has more votes. Print and save each candidate's vote count and percentage
         candidate_results.append(f"{candidate}: {formatted_percentage} ({votes})")
 
-
+    print() # Add a blank line for readability
     # Print the total vote count. Generate and print the winning candidate summary (to terminal). Write total vote count, generate and print winning candidate summary to the text file. 
     output =f"""Election Results
 -------------------------
